@@ -1,0 +1,66 @@
+```html
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>游戏资源站</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: linear-gradient(135deg, #1a1a2e, #16213e); min-height: 100vh; color: #fff; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
+        header { text-align: center; padding: 40px 0; }
+        h1 { font-size: 2.5rem; margin-bottom: 10px; background: linear-gradient(90deg, #00d4ff, #7c3aed); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .search-box { max-width: 600px; margin: 0 auto 30px; }
+        #search { width: 100%; padding: 15px 20px; font-size: 16px; border: none; border-radius: 50px; background: rgba(255,255,255,0.1); color: #fff; outline: none; }
+        .game-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 20px; }
+        .game-card { background: rgba(255,255,255,0.05); border-radius: 16px; padding: 20px; transition: all 0.3s; }
+        .game-card:hover { transform: translateY(-5px); background: rgba(255,255,255,0.08); }
+        .game-title { font-size: 1.1rem; font-weight: 600; margin-bottom: 10px; }
+        .game-date { font-size: 0.8rem; color: #666; margin-bottom: 15px; }
+        .game-link { display: inline-
+block; padding: 10px 20px; background: linear-gradient(90deg, #00d4ff, #7c3aed); color: #fff; text-decoration: none; border-radius: 8px; }
+        .no-result { text-align: center; padding: 60px; color: #666; }
+        .stats { text-align: center; color: #666; margin-bottom: 20px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🎮 游戏资源站</h1>
+            <p class="subtitle">每日更新 · 全部免费</p>
+        </header>
+        <div class="search-box">
+            <input type="text" id="search" placeholder="搜索游戏名称...">
+        </div>
+        <p class="stats" id="stats">共 0 个游戏</p>
+        <div class="game-grid" id="gameGrid"></div>
+        <div class="no-result" id="noResult" style="display:none">没有找到匹配的游戏</div>
+    </div>
+    <script>
+        let games = [];
+        let searchTerm = '';
+        async function loadGames() {
+            try {
+                const response = await fetch('games.json');
+                games = await response.json();
+            } catch (e) { games = []; }
+            renderGames();
+        }
+        function renderGames() {
+            const grid = document.getElementById('gameGrid');
+            const noResult = document.getElementById('noResult');
+            const stats = document.getElementById('stats');
+            let filtered = games.filter(g => g.title.toLowerCase().includes(searchTerm.toLowerCase()));
+            stats.textContent = `共 ${filtered.length} 个游戏`;
+            if (filtered.length === 0) { grid.innerHTML = ''; noResult.style.display = 'block'; return; }
+            noResult.style.display = 'none';
+            grid.innerHTML = filtered.map(g => `<div class="game-card"><h3 class="game-title">${g.title}</h3><p class="game-date">📅 ${g.date}</p><a href="${g.url}" target="_blank" class="game-link">下载</a></div>`).join('');
+        }
+        document.getElementById('search').addEventListener('input', e => { searchTerm = e.target.value; renderGames(); });
+        
+loadGames();
+    </script>
+</body>
+</html>
+```
