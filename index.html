@@ -1,66 +1,411 @@
-
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🎮 阿童的游戏资源站</title>
+    <title>🎮 ATgame资源站</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: linear-gradient(135deg, #1a1a2e, #16213e); min-height: 100vh; color: #fff; }
         .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
-        header { text-align: center; padding: 40px 0; }
+        header { text-align: center; padding: 40px 0 20px; }
         h1 { font-size: 2.5rem; margin-bottom: 10px; background: linear-gradient(90deg, #00d4ff, #7c3aed); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .search-box { max-width: 600px; margin: 0 auto 30px; }
+        .subtitle { color: #888; font-size: 0.95rem; }
+
+        /* 今日更新横幅 */
+        .today-banner {
+            background: linear-gradient(90deg, rgba(0,212,255,0.15), rgba(124,58,237,0.15));
+            border: 1px solid rgba(0,212,255,0.3);
+            border-radius: 16px;
+            padding: 16px 20px;
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        .today-banner .badge {
+            background: linear-gradient(90deg, #00d4ff, #7c3aed);
+            color: #fff;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+        .today-banner .today-count {
+            color: #00d4ff;
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+        .today-banner .today-list {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            flex: 1;
+        }
+        .today-tag {
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.15);
+            color: #ddd;
+            padding: 3px 10px;
+            border-radius: 12px;
+            font-size: 0.78rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+        .today-tag:hover {
+            background: rgba(0,212,255,0.2);
+            border-color: #00d4ff;
+            color: #00d4ff;
+        }
+
+        /* 搜索框 */
+        .search-box { max-width: 600px; margin: 0 auto 20px; position: relative; }
         #search { width: 100%; padding: 15px 20px; font-size: 16px; border: none; border-radius: 50px; background: rgba(255,255,255,0.1); color: #fff; outline: none; }
-        .game-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 20px; }
-        .game-card { background: rgba(255,255,255,0.05); border-radius: 16px; padding: 20px; transition: all 0.3s; }
-        .game-card:hover { transform: translateY(-5px); background: rgba(255,255,255,0.08); }
-        .game-title { font-size: 1.1rem; font-weight: 600; margin-bottom: 10px; }
-        .game-date { font-size: 0.8rem; color: #666; margin-bottom: 15px; }
-        .game-link { display: inline-
-block; padding: 10px 20px; background: linear-gradient(90deg, #00d4ff, #7c3aed); color: #fff; text-decoration: none; border-radius: 8px; }
+        #search::placeholder { color: #666; }
+        .search-clear { position: absolute; right: 16px; top: 50%; transform: translateY(-50%); cursor: pointer; color: #666; font-size: 1.2rem; display: none; }
+
+        /* 筛选栏 */
+        .filter-bar {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+        }
+        .filter-btn {
+            padding: 8px 16px;
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 20px;
+            background: transparent;
+            color: #aaa;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.9rem;
+        }
+        .filter-btn:hover, .filter-btn.active {
+            background: linear-gradient(90deg, #00d4ff, #7c3aed);
+            border-color: transparent;
+            color: #fff;
+        }
+        .filter-btn .count {
+            background: rgba(255,255,255,0.2);
+            border-radius: 10px;
+            padding: 1px 6px;
+            font-size: 0.75rem;
+            margin-left: 4px;
+        }
+        .filter-btn.active .count {
+            background: rgba(255,255,255,0.3);
+        }
+
+        /* 排序栏 */
+        .sort-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .stats { color: #666; font-size: 0.9rem; }
+        .sort-btns { display: flex; gap: 8px; }
+        .sort-btn {
+            padding: 6px 14px;
+            border: 1px solid rgba(255,255,255,0.15);
+            border-radius: 16px;
+            background: transparent;
+            color: #888;
+            cursor: pointer;
+            font-size: 0.82rem;
+            transition: all 0.2s;
+        }
+        .sort-btn.active, .sort-btn:hover {
+            border-color: #00d4ff;
+            color: #00d4ff;
+        }
+
+        /* 游戏卡片 */
+        .game-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 16px; }
+        .game-card {
+            background: rgba(255,255,255,0.05);
+            border-radius: 16px;
+            padding: 18px;
+            transition: all 0.3s;
+            border: 1px solid transparent;
+            position: relative;
+        }
+        .game-card:hover {
+            transform: translateY(-4px);
+            background: rgba(255,255,255,0.08);
+            border-color: rgba(0,212,255,0.2);
+        }
+        .game-card.today-new {
+            border-color: rgba(0,212,255,0.3);
+        }
+        .new-badge {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background: linear-gradient(90deg, #ff6b35, #f7c59f);
+            color: #fff;
+            font-size: 0.7rem;
+            font-weight: 700;
+            padding: 2px 8px;
+            border-radius: 10px;
+        }
+        .card-top { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 10px; }
+        .game-tag {
+            display: inline-block;
+            padding: 3px 10px;
+            background: rgba(0,212,255,0.15);
+            color: #00d4ff;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            white-space: nowrap;
+        }
+        .game-title { font-size: 1.05rem; font-weight: 600; margin-bottom: 6px; line-height: 1.4; }
+        .game-date { font-size: 0.78rem; color: #666; margin-bottom: 12px; }
+        .game-link {
+            display: inline-block;
+            padding: 8px 18px;
+            background: linear-gradient(90deg, #00d4ff, #7c3aed);
+            color: #fff;
+            text-decoration: none;
+            border-radius: 8px;
+            font-size: 0.88rem;
+            transition: opacity 0.2s;
+        }
+        .game-link:hover { opacity: 0.85; }
+
         .no-result { text-align: center; padding: 60px; color: #666; }
-        .stats { text-align: center; color: #666; margin-bottom: 20px; }
+        .no-result .icon { font-size: 3rem; margin-bottom: 12px; }
+
+        /* 今日更新筛选激活状态 */
+        .filter-btn.today-active {
+            background: linear-gradient(90deg, #ff6b35, #f7c59f);
+            border-color: transparent;
+            color: #fff;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <header>
-            <h1>🎮 阿童的游戏资源站</h1>
+            <h1>🎮 ATgame资源站</h1>
             <p class="subtitle">每日更新 · 全部免费</p>
         </header>
-        <div class="search-box">
-            <input type="text" id="search" placeholder="搜索游戏名称...">
+
+        <!-- 今日更新横幅 -->
+        <div class="today-banner" id="todayBanner" style="display:none">
+            <span class="badge">🔥 今日更新</span>
+            <span class="today-count" id="todayCount"></span>
+            <div class="today-list" id="todayList"></div>
         </div>
-        <p class="stats" id="stats">共 0 个游戏</p>
+
+        <!-- 搜索框 -->
+        <div class="search-box">
+            <input type="text" id="search" placeholder="🔍 搜索游戏名称...">
+            <span class="search-clear" id="searchClear">✕</span>
+        </div>
+
+        <!-- 分类筛选 -->
+        <div class="filter-bar">
+            <button class="filter-btn active" data-filter="all">全部 <span class="count" id="count-all">0</span></button>
+            <button class="filter-btn" data-filter="today">🔥 今日更新 <span class="count" id="count-today">0</span></button>
+            <button class="filter-btn" data-filter="action">动作 <span class="count" id="count-action">0</span></button>
+            <button class="filter-btn" data-filter="rpg">RPG <span class="count" id="count-rpg">0</span></button>
+            <button class="filter-btn" data-filter="strategy">策略 <span class="count" id="count-strategy">0</span></button>
+            <button class="filter-btn" data-filter="simulation">模拟 <span class="count" id="count-simulation">0</span></button>
+            <button class="filter-btn" data-filter="casual">休闲 <span class="count" id="count-casual">0</span></button>
+            <button class="filter-btn" data-filter="software">软件 <span class="count" id="count-software">0</span></button>
+        </div>
+
+        <!-- 排序栏 -->
+        <div class="sort-bar">
+            <span class="stats" id="stats">共 0 个游戏</span>
+            <div class="sort-btns">
+                <button class="sort-btn active" data-sort="date">最新优先</button>
+                <button class="sort-btn" data-sort="title">按名称</button>
+            </div>
+        </div>
+
+        <!-- 游戏列表 -->
         <div class="game-grid" id="gameGrid"></div>
-        <div class="no-result" id="noResult" style="display:none">没有找到匹配的游戏</div>
+        <div class="no-result" id="noResult" style="display:none">
+            <div class="icon">🎮</div>
+            <p>没有找到匹配的游戏</p>
+        </div>
     </div>
+
     <script>
         let games = [];
+        let currentFilter = 'all';
+        let currentSort = 'date';
         let searchTerm = '';
+
+        const categoryNames = {
+            action: '动作', rpg: 'RPG', strategy: '策略',
+            simulation: '模拟', casual: '休闲', software: '软件'
+        };
+
+        // 获取今天日期字符串 YYYY-MM-DD
+        function getTodayStr() {
+            const d = new Date();
+            return d.getFullYear() + '-' +
+                String(d.getMonth() + 1).padStart(2, '0') + '-' +
+                String(d.getDate()).padStart(2, '0');
+        }
+
+        function isToday(dateStr) {
+            if (!dateStr) return false;
+            return dateStr.startsWith(getTodayStr());
+        }
+
         async function loadGames() {
             try {
                 const response = await fetch('games.json');
                 games = await response.json();
             } catch (e) { games = []; }
+            updateCounts();
+            renderTodayBanner();
             renderGames();
         }
+
+        // 更新各分类数量
+        function updateCounts() {
+            const today = getTodayStr();
+            const todayGames = games.filter(g => isToday(g.date));
+
+            document.getElementById('count-all').textContent = games.length;
+            document.getElementById('count-today').textContent = todayGames.length;
+
+            ['action', 'rpg', 'strategy', 'simulation', 'casual', 'software'].forEach(cat => {
+                const el = document.getElementById('count-' + cat);
+                if (el) el.textContent = games.filter(g => g.category === cat).length;
+            });
+        }
+
+        // 渲染今日更新横幅
+        function renderTodayBanner() {
+            const todayGames = games.filter(g => isToday(g.date));
+            const banner = document.getElementById('todayBanner');
+            const countEl = document.getElementById('todayCount');
+            const listEl = document.getElementById('todayList');
+
+            if (todayGames.length === 0) {
+                banner.style.display = 'none';
+                return;
+            }
+
+            banner.style.display = 'flex';
+            countEl.textContent = `今天新增 ${todayGames.length} 个游戏`;
+            listEl.innerHTML = todayGames.slice(0, 8).map(g => `
+                <span class="today-tag" onclick="scrollToGame('${g.title}')">${g.title}</span>
+            `).join('') + (todayGames.length > 8 ? `<span class="today-tag">+${todayGames.length - 8} 更多</span>` : '');
+        }
+
+        // 点击今日更新标签滚动到对应游戏
+        function scrollToGame(title) {
+            const cards = document.querySelectorAll('.game-card');
+            for (const card of cards) {
+                if (card.querySelector('.game-title')?.textContent === title) {
+                    card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    card.style.boxShadow = '0 0 20px rgba(0,212,255,0.5)';
+                    setTimeout(() => card.style.boxShadow = '', 2000);
+                    break;
+                }
+            }
+        }
+
         function renderGames() {
             const grid = document.getElementById('gameGrid');
             const noResult = document.getElementById('noResult');
             const stats = document.getElementById('stats');
-            let filtered = games.filter(g => g.title.toLowerCase().includes(searchTerm.toLowerCase()));
+
+            let filtered = games.filter(g => {
+                const matchSearch = g.title.toLowerCase().includes(searchTerm.toLowerCase());
+                const matchFilter = currentFilter === 'all' ? true
+                    : currentFilter === 'today' ? isToday(g.date)
+                    : g.category === currentFilter;
+                return matchSearch && matchFilter;
+            });
+
+            // 排序
+            if (currentSort === 'date') {
+                filtered.sort((a, b) => (b.date || '').localeCompare(a.date || ''));
+            } else {
+                filtered.sort((a, b) => a.title.localeCompare(b.title, 'zh'));
+            }
+
             stats.textContent = `共 ${filtered.length} 个游戏`;
-            if (filtered.length === 0) { grid.innerHTML = ''; noResult.style.display = 'block'; return; }
+
+            if (filtered.length === 0) {
+                grid.innerHTML = '';
+                noResult.style.display = 'block';
+                return;
+            }
+
             noResult.style.display = 'none';
-            grid.innerHTML = filtered.map(g => `<div class="game-card"><h3 class="game-title">${g.title}</h3><p class="game-date">📅 ${g.date}</p><a href="${g.url}" target="_blank" class="game-link">下载</a></div>`).join('');
+            grid.innerHTML = filtered.map(g => {
+                const todayNew = isToday(g.date);
+                return `
+                <div class="game-card ${todayNew ? 'today-new' : ''}">
+                    ${todayNew ? '<span class="new-badge">NEW</span>' : ''}
+                    <div class="card-top">
+                        <span class="game-tag">${categoryNames[g.category] || g.category || '其他'}</span>
+                    </div>
+                    <h3 class="game-title">${g.title}</h3>
+                    <p class="game-date">📅 ${g.date || '未知日期'}</p>
+                    <a href="${g.url}" target="_blank" class="game-link">🔗 下载</a>
+                </div>`;
+            }).join('');
         }
-        document.getElementById('search').addEventListener('input', e => { searchTerm = e.target.value; renderGames(); });
-        
-loadGames();
+
+        // 搜索
+        const searchInput = document.getElementById('search');
+        const searchClear = document.getElementById('searchClear');
+        searchInput.addEventListener('input', e => {
+            searchTerm = e.target.value;
+            searchClear.style.display = searchTerm ? 'block' : 'none';
+            renderGames();
+        });
+        searchClear.addEventListener('click', () => {
+            searchInput.value = '';
+            searchTerm = '';
+            searchClear.style.display = 'none';
+            renderGames();
+        });
+
+        // 分类筛选
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.filter-btn').forEach(b => {
+                    b.classList.remove('active', 'today-active');
+                });
+                currentFilter = btn.dataset.filter;
+                if (currentFilter === 'today') {
+                    btn.classList.add('today-active');
+                } else {
+                    btn.classList.add('active');
+                }
+                renderGames();
+            });
+        });
+
+        // 排序
+        document.querySelectorAll('.sort-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.sort-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                currentSort = btn.dataset.sort;
+                renderGames();
+            });
+        });
+
+        loadGames();
     </script>
 </body>
 </html>
-
