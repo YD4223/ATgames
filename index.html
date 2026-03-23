@@ -4,13 +4,85 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>🎮 ATgame资源站</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎮</text></svg>" type="image/svg+xml">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: linear-gradient(135deg, #1a1a2e, #16213e); min-height: 100vh; color: #fff; }
-        .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
-        header { text-align: center; padding: 40px 0 20px; }
-        h1 { font-size: 2.5rem; margin-bottom: 10px; background: linear-gradient(90deg, #00d4ff, #7c3aed); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .subtitle { color: #888; font-size: 0.95rem; }
+        
+        /* 动态背景 */
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            min-height: 100vh;
+            color: #fff;
+            background: linear-gradient(-45deg, #0f0c29, #302b63, #24243e, #1a1a2e, #16213e);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            position: relative;
+        }
+        
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        /* 星空粒子效果 */
+        .stars {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+        .star {
+            position: absolute;
+            width: 2px; height: 2px;
+            background: rgba(255,255,255,0.8);
+            border-radius: 50%;
+            animation: twinkle 3s infinite;
+        }
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.2); }
+        }
+
+        .container { max-width: 1200px; margin: 0 auto; padding: 20px; position: relative; z-index: 1; }
+        
+        /* 公告栏 */
+        .announcement {
+            background: linear-gradient(90deg, rgba(255,107,53,0.2), rgba(247,197,159,0.2));
+            border: 1px solid rgba(255,107,53,0.4);
+            border-radius: 12px;
+            padding: 12px 20px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(255,107,53,0.4); }
+            50% { box-shadow: 0 0 20px 5px rgba(255,107,53,0.2); }
+        }
+        .announcement-icon { font-size: 1.2rem; }
+        .announcement-text { flex: 1; font-size: 0.9rem; color: #ffaa7f; }
+        .announcement-close {
+            background: none; border: none; color: #ffaa7f;
+            cursor: pointer; font-size: 1.2rem; opacity: 0.7;
+        }
+        .announcement-close:hover { opacity: 1; }
+
+        header { text-align: center; padding: 30px 0 20px; }
+        h1 {
+            font-size: 2.8rem; margin-bottom: 10px;
+            background: linear-gradient(90deg, #00d4ff, #7c3aed, #ff6b6b);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: shine 3s linear infinite;
+        }
+        @keyframes shine {
+            to { background-position: 200% center; }
+        }
+        .subtitle { color: #888; font-size: 1rem; letter-spacing: 2px; }
 
         /* 今日更新横幅 */
         .today-banner {
@@ -23,6 +95,7 @@
             align-items: center;
             gap: 12px;
             flex-wrap: wrap;
+            backdrop-filter: blur(10px);
         }
         .today-banner .badge {
             background: linear-gradient(90deg, #00d4ff, #7c3aed);
@@ -31,19 +104,9 @@
             border-radius: 20px;
             font-size: 0.8rem;
             font-weight: 700;
-            white-space: nowrap;
         }
-        .today-banner .today-count {
-            color: #00d4ff;
-            font-weight: 600;
-            font-size: 0.95rem;
-        }
-        .today-banner .today-list {
-            display: flex;
-            gap: 8px;
-            flex-wrap: wrap;
-            flex: 1;
-        }
+        .today-banner .today-count { color: #00d4ff; font-weight: 600; font-size: 0.95rem; }
+        .today-banner .today-list { display: flex; gap: 8px; flex-wrap: wrap; flex: 1; }
         .today-tag {
             background: rgba(255,255,255,0.08);
             border: 1px solid rgba(255,255,255,0.15);
@@ -53,42 +116,67 @@
             font-size: 0.78rem;
             cursor: pointer;
             transition: all 0.2s;
-            white-space: nowrap;
         }
         .today-tag:hover {
             background: rgba(0,212,255,0.2);
             border-color: #00d4ff;
             color: #00d4ff;
+            transform: translateY(-2px);
         }
 
         /* 搜索框 */
         .search-box { max-width: 600px; margin: 0 auto 20px; position: relative; }
-        #search { width: 100%; padding: 15px 20px; font-size: 16px; border: none; border-radius: 50px; background: rgba(255,255,255,0.1); color: #fff; outline: none; }
+        #search {
+            width: 100%; padding: 15px 50px 15px 20px;
+            font-size: 16px; border: none; border-radius: 50px;
+            background: rgba(255,255,255,0.1);
+            color: #fff; outline: none;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        #search:focus { border-color: #00d4ff; box-shadow: 0 0 20px rgba(0,212,255,0.2); }
         #search::placeholder { color: #666; }
-        .search-clear { position: absolute; right: 16px; top: 50%; transform: translateY(-50%); cursor: pointer; color: #666; font-size: 1.2rem; display: none; }
+        .search-clear {
+            position: absolute; right: 16px; top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer; color: #666;
+            font-size: 1.2rem;
+            width: 30px; height: 30px;
+            display: flex; align-items: center; justify-content: center;
+            border-radius: 50%;
+        }
+        .search-clear:hover { background: rgba(255,255,255,0.1); color: #fff; }
 
         /* 筛选栏 */
+        .filter-section { margin-bottom: 16px; }
+        .filter-label {
+            color: #888; font-size: 0.85rem;
+            margin-bottom: 8px; display: block;
+        }
         .filter-bar {
             display: flex;
             justify-content: center;
             gap: 8px;
-            margin-bottom: 16px;
+            margin-bottom: 12px;
             flex-wrap: wrap;
         }
         .filter-btn {
             padding: 8px 16px;
             border: 1px solid rgba(255,255,255,0.2);
             border-radius: 20px;
-            background: transparent;
+            background: rgba(255,255,255,0.05);
             color: #aaa;
             cursor: pointer;
             transition: all 0.3s;
             font-size: 0.9rem;
+            backdrop-filter: blur(10px);
         }
         .filter-btn:hover, .filter-btn.active {
             background: linear-gradient(90deg, #00d4ff, #7c3aed);
             border-color: transparent;
             color: #fff;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(0,212,255,0.3);
         }
         .filter-btn .count {
             background: rgba(255,255,255,0.2);
@@ -97,8 +185,16 @@
             font-size: 0.75rem;
             margin-left: 4px;
         }
-        .filter-btn.active .count {
-            background: rgba(255,255,255,0.3);
+
+        /* 平台筛选特殊样式 */
+        .filter-btn[data-filter="pc"].active {
+            background: linear-gradient(90deg, #4facfe, #00f2fe);
+        }
+        .filter-btn[data-filter="android"].active {
+            background: linear-gradient(90deg, #43e97b, #38f9d7);
+        }
+        .filter-btn[data-filter="today"].active {
+            background: linear-gradient(90deg, #ff6b35, #f7c59f);
         }
 
         /* 排序栏 */
@@ -109,14 +205,15 @@
             margin-bottom: 20px;
             flex-wrap: wrap;
             gap: 10px;
+            padding: 0 10px;
         }
-        .stats { color: #666; font-size: 0.9rem; }
+        .stats { color: #888; font-size: 0.9rem; }
         .sort-btns { display: flex; gap: 8px; }
         .sort-btn {
             padding: 6px 14px;
             border: 1px solid rgba(255,255,255,0.15);
             border-radius: 16px;
-            background: transparent;
+            background: rgba(255,255,255,0.05);
             color: #888;
             cursor: pointer;
             font-size: 0.82rem;
@@ -125,74 +222,244 @@
         .sort-btn.active, .sort-btn:hover {
             border-color: #00d4ff;
             color: #00d4ff;
+            background: rgba(0,212,255,0.1);
         }
 
         /* 游戏卡片 */
-        .game-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 16px; }
+        .game-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 20px;
+        }
         .game-card {
             background: rgba(255,255,255,0.05);
-            border-radius: 16px;
-            padding: 18px;
+            border-radius: 20px;
+            padding: 20px;
             transition: all 0.3s;
-            border: 1px solid transparent;
+            border: 1px solid rgba(255,255,255,0.08);
             position: relative;
+            backdrop-filter: blur(10px);
         }
         .game-card:hover {
-            transform: translateY(-4px);
-            background: rgba(255,255,255,0.08);
-            border-color: rgba(0,212,255,0.2);
+            transform: translateY(-8px);
+            background: rgba(255,255,255,0.1);
+            border-color: rgba(0,212,255,0.3);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
         }
         .game-card.today-new {
-            border-color: rgba(0,212,255,0.3);
+            border-color: rgba(255,107,53,0.4);
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+        @keyframes glow {
+            from { box-shadow: 0 0 5px rgba(255,107,53,0.2); }
+            to { box-shadow: 0 0 20px rgba(255,107,53,0.4); }
         }
         .new-badge {
-            position: absolute;
-            top: 12px;
-            right: 12px;
+            position: absolute; top: 12px; right: 12px;
             background: linear-gradient(90deg, #ff6b35, #f7c59f);
             color: #fff;
-            font-size: 0.7rem;
-            font-weight: 700;
-            padding: 2px 8px;
-            border-radius: 10px;
+            font-size: 0.7rem; font-weight: 700;
+            padding: 3px 10px;
+            border-radius: 12px;
+            animation: pulse-badge 1.5s infinite;
         }
-        .card-top { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 10px; }
+        @keyframes pulse-badge {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        .card-top {
+            display: flex; align-items: center; gap: 8px;
+            margin-bottom: 12px; flex-wrap: wrap;
+        }
         .game-tag {
             display: inline-block;
-            padding: 3px 10px;
+            padding: 4px 12px;
             background: rgba(0,212,255,0.15);
             color: #00d4ff;
             border-radius: 12px;
             font-size: 0.75rem;
-            white-space: nowrap;
         }
-        .game-title { font-size: 1.05rem; font-weight: 600; margin-bottom: 6px; line-height: 1.4; }
-        .game-date { font-size: 0.78rem; color: #666; margin-bottom: 12px; }
+        .platform-tag {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 10px;
+            font-size: 0.7rem;
+            font-weight: 600;
+        }
+        .platform-tag.pc {
+            background: rgba(79,172,254,0.2);
+            color: #4facfe;
+        }
+        .platform-tag.android {
+            background: rgba(67,233,123,0.2);
+            color: #43e97b;
+        }
+        .game-title {
+            font-size: 1.1rem; font-weight: 600;
+            margin-bottom: 8px; line-height: 1.4;
+            color: #fff;
+        }
+        .game-date {
+            font-size: 0.78rem;
+            color: #888;
+            margin-bottom: 15px;
+        }
+        .card-actions {
+            display: flex; gap: 10px; align-items: center;
+        }
         .game-link {
             display: inline-block;
-            padding: 8px 18px;
+            padding: 10px 24px;
             background: linear-gradient(90deg, #00d4ff, #7c3aed);
             color: #fff;
             text-decoration: none;
-            border-radius: 8px;
-            font-size: 0.88rem;
-            transition: opacity 0.2s;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+            flex: 1;
+            text-align: center;
         }
-        .game-link:hover { opacity: 0.85; }
+        .game-link:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 30px rgba(0,212,255,0.3);
+        }
+        .feedback-btn {
+            padding: 10px 16px;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            color: #aaa;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+        }
+        .feedback-btn:hover {
+            background: rgba(255,107,53,0.2);
+            border-color: #ff6b35;
+            color: #ffaa7f;
+        }
 
-        .no-result { text-align: center; padding: 60px; color: #666; }
-        .no-result .icon { font-size: 3rem; margin-bottom: 12px; }
+        .no-result {
+            text-align: center; padding: 80px 20px;
+            color: #666;
+        }
+        .no-result .icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            opacity: 0.5;
+        }
 
-        /* 今日更新筛选激活状态 */
-        .filter-btn.today-active {
-            background: linear-gradient(90deg, #ff6b35, #f7c59f);
-            border-color: transparent;
+        /* 反馈弹窗 */
+        .modal-overlay {
+            position: fixed; top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0,0,0,0.8);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            backdrop-filter: blur(5px);
+        }
+        .modal-overlay.active { display: flex; }
+        .modal {
+            background: linear-gradient(135deg, #1a1a2e, #24243e);
+            border-radius: 20px;
+            padding: 30px;
+            width: 90%; max-width: 400px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .modal h3 {
+            margin-bottom: 20px;
             color: #fff;
+            font-size: 1.3rem;
+        }
+        .modal-info {
+            background: rgba(0,212,255,0.1);
+            border: 1px solid rgba(0,212,255,0.3);
+            border-radius: 10px;
+            padding: 12px;
+            margin-bottom: 15px;
+        }
+        .modal-info p {
+            color: #888;
+            font-size: 0.8rem;
+            margin-bottom: 5px;
+        }
+        .modal-info .game-name {
+            color: #00d4ff;
+            font-size: 0.95rem;
+            font-weight: 600;
+        }
+        .modal textarea {
+            width: 100%; min-height: 100px;
+            padding: 15px;
+            border-radius: 12px;
+            border: 1px solid rgba(255,255,255,0.2);
+            background: rgba(0,0,0,0.3);
+            color: #fff;
+            font-size: 0.95rem;
+            resize: vertical;
+            margin-bottom: 15px;
+        }
+        .modal textarea:focus {
+            outline: none;
+            border-color: #00d4ff;
+        }
+        .modal input {
+            width: 100%; padding: 12px 15px;
+            border-radius: 10px;
+            border: 1px solid rgba(255,255,255,0.2);
+            background: rgba(0,0,0,0.3);
+            color: #fff;
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+        }
+        .modal input:focus {
+            outline: none;
+            border-color: #00d4ff;
+        }
+        .modal-buttons {
+            display: flex; gap: 10px;
+        }
+        .modal-btn {
+            flex: 1; padding: 12px;
+            border-radius: 10px;
+            border: none;
+            cursor: pointer;
+            font-size: 0.95rem;
+            transition: all 0.2s;
+        }
+        .modal-btn.submit {
+            background: linear-gradient(90deg, #00d4ff, #7c3aed);
+            color: #fff;
+        }
+        .modal-btn.cancel {
+            background: rgba(255,255,255,0.1);
+            color: #aaa;
+        }
+        .modal-btn:hover { transform: scale(1.02); }
+
+        /* 响应式 */
+        @media (max-width: 768px) {
+            h1 { font-size: 2rem; }
+            .game-grid { grid-template-columns: 1fr; }
+            .filter-bar { gap: 6px; }
+            .filter-btn { padding: 6px 12px; font-size: 0.85rem; }
         }
     </style>
 </head>
 <body>
+    <!-- 星空背景 -->
+    <div class="stars" id="stars"></div>
+
     <div class="container">
+        <!-- 公告栏 -->
+        <div class="announcement" id="announcement">
+            <span class="announcement-icon">📢</span>
+            <span class="announcement-text">🎉 网站全新升级！新增平台筛选、动态背景、反馈功能！</span>
+            <button class="announcement-close" onclick="closeAnnouncement()">✕</button>
+        </div>
+
         <header>
             <h1>🎮 ATgame资源站</h1>
             <p class="subtitle">每日更新 · 全部免费</p>
@@ -208,27 +475,40 @@
         <!-- 搜索框 -->
         <div class="search-box">
             <input type="text" id="search" placeholder="🔍 搜索游戏名称...">
-            <span class="search-clear" id="searchClear">✕</span>
+            <span class="search-clear" id="searchClear" style="display:none">✕</span>
+        </div>
+
+        <!-- 平台筛选 -->
+        <div class="filter-section">
+            <span class="filter-label">🖥️ 平台</span>
+            <div class="filter-bar">
+                <button class="filter-btn active" data-filter="all" data-type="platform">全部</button>
+                <button class="filter-btn" data-filter="pc" data-type="platform">🖥️ 电脑</button>
+                <button class="filter-btn" data-filter="android" data-type="platform">📱 安卓</button>
+            </div>
         </div>
 
         <!-- 分类筛选 -->
-        <div class="filter-bar">
-            <button class="filter-btn active" data-filter="all">全部 <span class="count" id="count-all">0</span></button>
-            <button class="filter-btn" data-filter="today">🔥 今日更新 <span class="count" id="count-today">0</span></button>
-            <button class="filter-btn" data-filter="action">动作 <span class="count" id="count-action">0</span></button>
-            <button class="filter-btn" data-filter="rpg">RPG <span class="count" id="count-rpg">0</span></button>
-            <button class="filter-btn" data-filter="strategy">策略 <span class="count" id="count-strategy">0</span></button>
-            <button class="filter-btn" data-filter="simulation">模拟 <span class="count" id="count-simulation">0</span></button>
-            <button class="filter-btn" data-filter="casual">休闲 <span class="count" id="count-casual">0</span></button>
-            <button class="filter-btn" data-filter="software">软件 <span class="count" id="count-software">0</span></button>
+        <div class="filter-section">
+            <span class="filter-label">🎮 类型</span>
+            <div class="filter-bar">
+                <button class="filter-btn active" data-filter="all" data-type="category">全部 <span class="count" id="count-all">0</span></button>
+                <button class="filter-btn" data-filter="today" data-type="category">🔥 今日更新 <span class="count" id="count-today">0</span></button>
+                <button class="filter-btn" data-filter="action" data-type="category">动作 <span class="count" id="count-action">0</span></button>
+                <button class="filter-btn" data-filter="rpg" data-type="category">RPG <span class="count" id="count-rpg">0</span></button>
+                <button class="filter-btn" data-filter="strategy" data-type="category">策略 <span class="count" id="count-strategy">0</span></button>
+                <button class="filter-btn" data-filter="simulation" data-type="category">模拟 <span class="count" id="count-simulation">0</span></button>
+                <button class="filter-btn" data-filter="casual" data-type="category">休闲 <span class="count" id="count-casual">0</span></button>
+                <button class="filter-btn" data-filter="software" data-type="category">软件 <span class="count" id="count-software">0</span></button>
+            </div>
         </div>
 
         <!-- 排序栏 -->
         <div class="sort-bar">
             <span class="stats" id="stats">共 0 个游戏</span>
             <div class="sort-btns">
-                <button class="sort-btn active" data-sort="date">最新优先</button>
-                <button class="sort-btn" data-sort="title">按名称</button>
+                <button class="sort-btn active" data-sort="date">📅 最新优先</button>
+                <button class="sort-btn" data-sort="title">🔤 按名称</button>
             </div>
         </div>
 
@@ -240,18 +520,63 @@
         </div>
     </div>
 
+    <!-- 反馈弹窗 -->
+    <div class="modal-overlay" id="feedbackModal">
+        <div class="modal">
+            <h3>💬 反馈问题</h3>
+            <div class="modal-info">
+                <p>游戏名称</p>
+                <p class="game-name" id="feedbackGame"></p>
+            </div>
+            <textarea id="feedbackContent" placeholder="请描述问题（如：链接失效、下载不了、密码错误等）..."></textarea>
+            <input type="text" id="feedbackContact" placeholder="508002830@qq.com">
+            <div class="modal-buttons">
+                <button class="modal-btn cancel" onclick="closeFeedback()">取消</button>
+                <button class="modal-btn submit" onclick="submitFeedback()">📧 发送邮件</button>
+            </div>
+        </div>
+    </div>
+
     <script>
+        // ===== 配置区域 =====
+        const CONFIG = {
+            // 接收反馈的邮箱地址 - 改成你的邮箱
+            feedbackEmail: 'your-email@example.com',
+            // 网站名称
+            siteName: '游戏资源站'
+        };
+        // =====================
+
         let games = [];
-        let currentFilter = 'all';
+        let currentPlatform = 'all';
+        let currentCategory = 'all';
         let currentSort = 'date';
         let searchTerm = '';
+        let currentFeedbackGame = '';
 
         const categoryNames = {
             action: '动作', rpg: 'RPG', strategy: '策略',
             simulation: '模拟', casual: '休闲', software: '软件'
         };
+        const platformNames = {
+            pc: '🖥️ 电脑', android: '📱 安卓'
+        };
 
-        // 获取今天日期字符串 YYYY-MM-DD
+        // 生成星空背景
+        function createStars() {
+            const starsContainer = document.getElementById('stars');
+            for (let i = 0; i < 100; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                star.style.left = Math.random() * 100 + '%';
+                star.style.top = Math.random() * 100 + '%';
+                star.style.animationDelay = Math.random() * 3 + 's';
+                star.style.opacity = Math.random();
+                starsContainer.appendChild(star);
+            }
+        }
+
+        // 获取今天日期
         function getTodayStr() {
             const d = new Date();
             return d.getFullYear() + '-' +
@@ -274,14 +599,11 @@
             renderGames();
         }
 
-        // 更新各分类数量
+        // 更新数量统计
         function updateCounts() {
-            const today = getTodayStr();
-            const todayGames = games.filter(g => isToday(g.date));
-
             document.getElementById('count-all').textContent = games.length;
-            document.getElementById('count-today').textContent = todayGames.length;
-
+            document.getElementById('count-today').textContent = games.filter(g => isToday(g.date)).length;
+            
             ['action', 'rpg', 'strategy', 'simulation', 'casual', 'software'].forEach(cat => {
                 const el = document.getElementById('count-' + cat);
                 if (el) el.textContent = games.filter(g => g.category === cat).length;
@@ -292,34 +614,32 @@
         function renderTodayBanner() {
             const todayGames = games.filter(g => isToday(g.date));
             const banner = document.getElementById('todayBanner');
-            const countEl = document.getElementById('todayCount');
-            const listEl = document.getElementById('todayList');
-
+            
             if (todayGames.length === 0) {
                 banner.style.display = 'none';
                 return;
             }
 
             banner.style.display = 'flex';
-            countEl.textContent = `今天新增 ${todayGames.length} 个游戏`;
-            listEl.innerHTML = todayGames.slice(0, 8).map(g => `
-                <span class="today-tag" onclick="scrollToGame('${g.title}')">${g.title}</span>
-            `).join('') + (todayGames.length > 8 ? `<span class="today-tag">+${todayGames.length - 8} 更多</span>` : '');
+            document.getElementById('todayCount').textContent = `今天新增 ${todayGames.length} 个游戏`;
+            document.getElementById('todayList').innerHTML = todayGames.slice(0, 8).map(g => 
+                `<span class="today-tag" onclick="scrollToGame('${g.title}')">${g.title}</span>`
+            ).join('') + (todayGames.length > 8 ? `<span class="today-tag">+${todayGames.length - 8}</span>` : '');
         }
 
-        // 点击今日更新标签滚动到对应游戏
         function scrollToGame(title) {
             const cards = document.querySelectorAll('.game-card');
             for (const card of cards) {
                 if (card.querySelector('.game-title')?.textContent === title) {
                     card.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                    card.style.boxShadow = '0 0 20px rgba(0,212,255,0.5)';
+                    card.style.boxShadow = '0 0 30px rgba(0,212,255,0.6)';
                     setTimeout(() => card.style.boxShadow = '', 2000);
                     break;
                 }
             }
         }
 
+        // 渲染游戏列表
         function renderGames() {
             const grid = document.getElementById('gameGrid');
             const noResult = document.getElementById('noResult');
@@ -327,10 +647,11 @@
 
             let filtered = games.filter(g => {
                 const matchSearch = g.title.toLowerCase().includes(searchTerm.toLowerCase());
-                const matchFilter = currentFilter === 'all' ? true
-                    : currentFilter === 'today' ? isToday(g.date)
-                    : g.category === currentFilter;
-                return matchSearch && matchFilter;
+                const matchPlatform = currentPlatform === 'all' || g.platform === currentPlatform;
+                const matchCategory = currentCategory === 'all' ? true
+                    : currentCategory === 'today' ? isToday(g.date)
+                    : g.category === currentCategory;
+                return matchSearch && matchPlatform && matchCategory;
             });
 
             // 排序
@@ -356,10 +677,14 @@
                     ${todayNew ? '<span class="new-badge">NEW</span>' : ''}
                     <div class="card-top">
                         <span class="game-tag">${categoryNames[g.category] || g.category || '其他'}</span>
+                        <span class="platform-tag ${g.platform || 'pc'}">${platformNames[g.platform] || '🖥️ 电脑'}</span>
                     </div>
                     <h3 class="game-title">${g.title}</h3>
                     <p class="game-date">📅 ${g.date || '未知日期'}</p>
-                    <a href="${g.url}" target="_blank" class="game-link">🔗 下载</a>
+                    <div class="card-actions">
+                        <a href="${g.url}" target="_blank" class="game-link">⬇️ 下载</a>
+                        <button class="feedback-btn" onclick="openFeedback('${g.title}')">💬 反馈</button>
+                    </div>
                 </div>`;
             }).join('');
         }
@@ -369,7 +694,7 @@
         const searchClear = document.getElementById('searchClear');
         searchInput.addEventListener('input', e => {
             searchTerm = e.target.value;
-            searchClear.style.display = searchTerm ? 'block' : 'none';
+            searchClear.style.display = searchTerm ? 'flex' : 'none';
             renderGames();
         });
         searchClear.addEventListener('click', () => {
@@ -379,18 +704,23 @@
             renderGames();
         });
 
-        // 分类筛选
+        // 筛选按钮事件
         document.querySelectorAll('.filter-btn').forEach(btn => {
             btn.addEventListener('click', () => {
-                document.querySelectorAll('.filter-btn').forEach(b => {
-                    b.classList.remove('active', 'today-active');
+                const type = btn.dataset.type;
+                const filter = btn.dataset.filter;
+                
+                document.querySelectorAll(`.filter-btn[data-type="${type}"]`).forEach(b => {
+                    b.classList.remove('active');
                 });
-                currentFilter = btn.dataset.filter;
-                if (currentFilter === 'today') {
-                    btn.classList.add('today-active');
+                btn.classList.add('active');
+                
+                if (type === 'platform') {
+                    currentPlatform = filter;
                 } else {
-                    btn.classList.add('active');
+                    currentCategory = filter;
                 }
+                
                 renderGames();
             });
         });
@@ -405,6 +735,61 @@
             });
         });
 
+        // 公告栏
+        function closeAnnouncement() {
+            document.getElementById('announcement').style.display = 'none';
+            localStorage.setItem('announcementClosed', 'true');
+        }
+        
+        if (localStorage.getItem('announcementClosed') === 'true') {
+            document.getElementById('announcement').style.display = 'none';
+        }
+
+        // 反馈功能 - 发送到邮箱
+        function openFeedback(gameTitle) {
+            currentFeedbackGame = gameTitle;
+            document.getElementById('feedbackGame').textContent = gameTitle;
+            document.getElementById('feedbackModal').classList.add('active');
+        }
+
+        function closeFeedback() {
+            document.getElementById('feedbackModal').classList.remove('active');
+            document.getElementById('feedbackContent').value = '';
+            document.getElementById('feedbackContact').value = '';
+        }
+
+        function submitFeedback() {
+            const content = document.getElementById('feedbackContent').value.trim();
+            const contact = document.getElementById('feedbackContact').value.trim();
+            
+            if (!content) {
+                alert('请描述问题内容');
+                return;
+            }
+
+            // 构建邮件内容
+            const subject = encodeURIComponent(`【游戏反馈】${currentFeedbackGame}`);
+            const body = encodeURIComponent(
+                `游戏名称：${currentFeedbackGame}\n` +
+                `反馈时间：${new Date().toLocaleString('zh-CN')}\n` +
+                `问题描述：${content}\n` +
+                `联系方式：${contact || '未填写'}`
+            );
+
+            // 打开邮件客户端
+            window.location.href = `mailto:${CONFIG.feedbackEmail}?subject=${subject}&body=${body}`;
+            
+            alert('邮件已打开，请发送邮件反馈问题！');
+            closeFeedback();
+        }
+
+        // 点击弹窗外部关闭
+        document.getElementById('feedbackModal').addEventListener('click', (e) => {
+            if (e.target.id === 'feedbackModal') closeFeedback();
+        });
+
+        // 初始化
+        createStars();
         loadGames();
     </script>
 </body>
