@@ -89,13 +89,18 @@
             background: linear-gradient(90deg, rgba(0,212,255,0.15), rgba(124,58,237,0.15));
             border: 1px solid rgba(0,212,255,0.3);
             border-radius: 16px;
-            padding: 16px 20px;
+            padding: 14px 16px;
             margin-bottom: 24px;
             display: flex;
-            align-items: center;
-            gap: 12px;
-            flex-wrap: wrap;
+            flex-direction: column;
+            gap: 10px;
             backdrop-filter: blur(10px);
+        }
+        .today-banner-top {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
         }
         .today-banner .badge {
             background: linear-gradient(90deg, #00d4ff, #7c3aed);
@@ -133,21 +138,6 @@
             background: rgba(255,107,53,0.3);
             border-color: #ff6b35;
             color: #ff6b35;
-        }
-        .today-banner {
-            flex-wrap: nowrap;
-            align-items: flex-start;
-        }
-        .today-banner .today-list {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            flex: 1;
-            max-height: 80px;
-            overflow: hidden;
-        }
-        .today-banner .today-list.expanded {
-            max-height: none;
         }
 
         /* 搜索框 */
@@ -593,8 +583,10 @@
 
         <!-- 今日更新横幅 -->
         <div class="today-banner" id="todayBanner" style="display:none">
-            <span class="badge">🔥 今日更新</span>
-            <span class="today-count" id="todayCount"></span>
+            <div class="today-banner-top">
+                <span class="badge">🔥 今日更新</span>
+                <span class="today-count" id="todayCount"></span>
+            </div>
             <div class="today-list" id="todayList"></div>
         </div>
 
