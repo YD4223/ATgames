@@ -474,6 +474,71 @@
             .filter-bar { gap: 6px; }
             .filter-btn { padding: 6px 12px; font-size: 0.85rem; }
         }
+
+        /* 打赏区域 */
+        .donate-section {
+            background: linear-gradient(135deg, rgba(255,107,53,0.15), rgba(255,193,7,0.15));
+            border: 1px solid rgba(255,107,53,0.3);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 20px;
+            text-align: center;
+            backdrop-filter: blur(10px);
+        }
+        .donate-title {
+            font-size: 1.2rem;
+            margin-bottom: 8px;
+            color: #ffaa7f;
+        }
+        .donate-desc {
+            font-size: 0.85rem;
+            color: #888;
+            margin-bottom: 15px;
+        }
+        .donate-btn {
+            display: inline-block;
+            padding: 12px 30px;
+            background: linear-gradient(90deg, #ff6b35, #ffaa7f);
+            color: #fff;
+            border-radius: 25px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: none;
+            box-shadow: 0 5px 20px rgba(255,107,53,0.3);
+        }
+        .donate-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 30px rgba(255,107,53,0.5);
+        }
+
+        /* 打赏弹窗 */
+        .donate-modal .modal {
+            max-width: 500px;
+        }
+        .donate-codes {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .donate-code-item {
+            text-align: center;
+        }
+        .donate-code-item img {
+            width: 200px;
+            height: 280px;
+            border-radius: 12px;
+            border: 2px solid rgba(255,255,255,0.2);
+            object-fit: contain;
+            background: #fff;
+        }
+        .donate-code-label {
+            margin-top: 10px;
+            font-size: 1rem;
+            color: #fff;
+        }
     </style>
 </head>
 <body>
@@ -484,8 +549,15 @@
         <!-- 公告栏 -->
         <div class="announcement" id="announcement">
             <span class="announcement-icon">📢</span>
-            <span class="announcement-text">🎉 网站全新升级！点击下载可选择百度/夸克/迅雷网盘！有些网盘密码就在链接上建议：把密码单独复制后删去链接中的密码部分才能正常访问，如有其他问题加qq:508002830(备注来意）</span>
+            <span class="announcement-text">🎉 （本网站所有资源免费下载）网站全新升级！点击下载可选择百度/夸克/迅雷网盘！有些网盘密码就在链接上建议：把密码单独复制后删去链接中的密码部分才能正常访问，如有其他问题加qq:508002830(备注来意）</span>
             <button class="announcement-close" onclick="closeAnnouncement()">✕</button>
+        </div>
+
+        <!-- 打赏区域 -->
+        <div class="donate-section">
+            <div class="donate-title">☕ 支持一下</div>
+            <div class="donate-desc">您的支持是我更新最大的动力</div>
+            <button class="donate-btn" onclick="openDonateModal()">❤️ 打赏</button>
         </div>
 
         <header>
@@ -548,6 +620,27 @@
         </div>
     </div>
 
+    <!-- 打赏弹窗 -->
+    <div class="modal-overlay donate-modal" id="donateModal">
+        <div class="modal">
+            <h3>☕ 支持一下</h3>
+            <div class="donate-desc" style="text-align:center;margin-bottom:20px">您的支持是我更新最大的动力</div>
+            <div class="donate-codes">
+                <div class="donate-code-item">
+                    <img src="wechat.png" alt="微信收款码" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22200%22 height=%22280%22><rect fill=%22%23f5f5f5%22 width=%22200%22 height=%22280%22/><text x=%2250%22 y=%22150%22 font-size=%2214%22 fill=%22%23999%22>微信收款码</text></svg>'">
+                    <div class="donate-code-label">💚 微信</div>
+                </div>
+                <div class="donate-code-item">
+                    <img src="alipay.png" alt="支付宝收款码" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22200%22 height=%22280%22><rect fill=%22%23f5f5f5%22 width=%22200%22 height=%22280%22/><text x=%2250%22 y=%22150%22 font-size=%2214%22 fill=%22%23999%22>支付宝收款码</text></svg>'">
+                    <div class="donate-code-label">💙 支付宝</div>
+                </div>
+            </div>
+            <div style="text-align:center;margin-top:20px">
+                <button class="modal-btn cancel" onclick="closeDonateModal()" style="width:100%">关闭</button>
+            </div>
+        </div>
+    </div>
+
     <!-- 下载选择弹窗 -->
     <div class="modal-overlay" id="downloadModal">
         <div class="modal">
@@ -577,7 +670,7 @@
                 <p class="game-name" id="feedbackGame"></p>
             </div>
             <textarea id="feedbackContent" placeholder="请描述问题（如：链接失效、下载不了、密码错误等）..."></textarea>
-            <input type="text" id="feedbackContact" placeholder="QQ:508002830">
+            <input type="text" id="feedbackContact" placeholder="qq:508002830">
             <div class="feedback-buttons">
                 <button class="feedback-btn-cancel" onclick="closeFeedback()">取消</button>
                 <button class="feedback-btn-submit" onclick="submitFeedback()">📧 发送邮件</button>
@@ -589,9 +682,12 @@
         // ===== 配置区域 =====
         const CONFIG = {
             // 接收反馈的邮箱地址
-            feedbackEmail: 'QQ:508002830',
+            feedbackEmail: 'qq:508002830',
             // 网站名称
-            siteName: 'ATgame资源站'
+            siteName: 'ATgame资源站',
+            // 收款码图片链接（上传到GitHub后修改这里）
+            wechatQR: 'wechat.png',
+            alipayQR: 'alipay.png'
         };
         // =====================
 
@@ -890,6 +986,23 @@
         // 点击弹窗外部关闭反馈弹窗
         document.getElementById('feedbackModal').addEventListener('click', (e) => {
             if (e.target.id === 'feedbackModal') closeFeedback();
+        });
+
+        // ===== 打赏功能 =====
+        function openDonateModal() {
+            // 更新收款码图片链接
+            document.querySelector('#donateModal .donate-code-item:nth-child(1) img').src = CONFIG.wechatQR;
+            document.querySelector('#donateModal .donate-code-item:nth-child(2) img').src = CONFIG.alipayQR;
+            document.getElementById('donateModal').classList.add('active');
+        }
+
+        function closeDonateModal() {
+            document.getElementById('donateModal').classList.remove('active');
+        }
+
+        // 点击弹窗外部关闭打赏弹窗
+        document.getElementById('donateModal').addEventListener('click', (e) => {
+            if (e.target.id === 'donateModal') closeDonateModal();
         });
 
         // 初始化
