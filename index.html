@@ -255,6 +255,8 @@
             border: 1px solid rgba(255,255,255,0.08);
             position: relative;
             backdrop-filter: blur(10px);
+            display: flex;
+            flex-direction: column;
         }
         .game-card:hover {
             transform: translateY(-8px);
@@ -314,6 +316,7 @@
             font-size: 1.1rem; font-weight: 600;
             margin-bottom: 8px; line-height: 1.4;
             color: #fff;
+            flex: 1;
         }
         .game-date {
             font-size: 0.78rem;
@@ -322,6 +325,7 @@
         }
         .card-actions {
             display: flex; gap: 10px; align-items: center;
+            margin-top: auto;
         }
         .game-link {
             display: inline-block;
