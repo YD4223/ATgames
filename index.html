@@ -158,7 +158,7 @@
             justify-content: center;
             gap: 8px;
             margin-bottom: 12px;
-            flex-wrap: wrap;
+            flex-wrap: wrap
         }
         .filter-btn {
             padding: 8px 16px;
@@ -318,6 +318,8 @@
             transition: all 0.3s;
             flex: 1;
             text-align: center;
+            cursor: pointer;
+            border: none;
         }
         .game-link:hover {
             transform: scale(1.05);
@@ -349,7 +351,7 @@
             opacity: 0.5;
         }
 
-        /* 反馈弹窗 */
+        /* 下载选择弹窗 */
         .modal-overlay {
             position: fixed; top: 0; left: 0;
             width: 100%; height: 100%;
@@ -372,7 +374,45 @@
             margin-bottom: 20px;
             color: #fff;
             font-size: 1.3rem;
+            text-align: center;
         }
+        .modal-game-name {
+            background: rgba(0,212,255,0.1);
+            border: 1px solid rgba(0,212,255,0.3);
+            border-radius: 10px;
+            padding: 12px;
+            margin-bottom: 20px;
+            text-align: center;
+            color: #00d4ff;
+            font-weight: 600;
+        }
+        .modal-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .modal-btn {
+            padding: 15px 20px;
+            border-radius: 12px;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            color: #fff;
+        }
+        .modal-btn.baidu { background: #4CAF50; }
+        .modal-btn.quark { background: #2196F3; }
+        .modal-btn.thunder { background: #FF9800; }
+        .modal-btn.cancel { background: #666; }
+        .modal-btn:hover { transform: scale(1.02); opacity: 0.9; }
+        .modal-btn.disabled { opacity: 0.4; cursor: not-allowed; }
+
+        /* 反馈弹窗 */
+        .feedback-modal h3 { margin-bottom: 20px; color: #fff; font-size: 1.3rem; }
         .modal-info {
             background: rgba(0,212,255,0.1);
             border: 1px solid rgba(0,212,255,0.3);
@@ -380,16 +420,8 @@
             padding: 12px;
             margin-bottom: 15px;
         }
-        .modal-info p {
-            color: #888;
-            font-size: 0.8rem;
-            margin-bottom: 5px;
-        }
-        .modal-info .game-name {
-            color: #00d4ff;
-            font-size: 0.95rem;
-            font-weight: 600;
-        }
+        .modal-info p { color: #888; font-size: 0.8rem; margin-bottom: 5px; }
+        .modal-info .game-name { color: #00d4ff; font-size: 0.95rem; font-weight: 600; }
         .modal textarea {
             width: 100%; min-height: 100px;
             padding: 15px;
@@ -401,10 +433,7 @@
             resize: vertical;
             margin-bottom: 15px;
         }
-        .modal textarea:focus {
-            outline: none;
-            border-color: #00d4ff;
-        }
+        .modal textarea:focus { outline: none; border-color: #00d4ff; }
         .modal input {
             width: 100%; padding: 12px 15px;
             border-radius: 10px;
@@ -414,30 +443,29 @@
             font-size: 0.9rem;
             margin-bottom: 15px;
         }
-        .modal input:focus {
-            outline: none;
-            border-color: #00d4ff;
-        }
-        .modal-buttons {
-            display: flex; gap: 10px;
-        }
-        .modal-btn {
+        .modal input:focus { outline: none; border-color: #00d4ff; }
+        .feedback-buttons { display: flex; gap: 10px; }
+        .feedback-btn-submit {
             flex: 1; padding: 12px;
             border-radius: 10px;
             border: none;
             cursor: pointer;
             font-size: 0.95rem;
             transition: all 0.2s;
-        }
-        .modal-btn.submit {
             background: linear-gradient(90deg, #00d4ff, #7c3aed);
             color: #fff;
         }
-        .modal-btn.cancel {
+        .feedback-btn-cancel {
+            flex: 1; padding: 12px;
+            border-radius: 10px;
+            border: none;
+            cursor: pointer;
+            font-size: 0.95rem;
+            transition: all 0.2s;
             background: rgba(255,255,255,0.1);
             color: #aaa;
         }
-        .modal-btn:hover { transform: scale(1.02); }
+        .feedback-btn-submit:hover, .feedback-btn-cancel:hover { transform: scale(1.02); }
 
         /* 响应式 */
         @media (max-width: 768px) {
@@ -456,7 +484,7 @@
         <!-- 公告栏 -->
         <div class="announcement" id="announcement">
             <span class="announcement-icon">📢</span>
-            <span class="announcement-text">🎉 网站全新升级！新增平台筛选、动态背景、反馈功能！</span>
+            <span class="announcement-text">🎉 网站全新升级！点击下载可选择百度/夸克/雷霆网盘！</span>
             <button class="announcement-close" onclick="closeAnnouncement()">✕</button>
         </div>
 
@@ -520,8 +548,28 @@
         </div>
     </div>
 
+    <!-- 下载选择弹窗 -->
+    <div class="modal-overlay" id="downloadModal">
+        <div class="modal">
+            <h3>📥 选择下载方式</h3>
+            <div class="modal-game-name" id="downloadGameName"></div>
+            <div class="modal-buttons">
+                <button class="modal-btn baidu" id="btnBaidu" onclick="confirmDownload('baidu')">
+                    📁 百度网盘
+                </button>
+                <button class="modal-btn quark" id="btnQuark" onclick="confirmDownload('quark')">
+                    📁 夸克网盘
+                </button>
+                <button class="modal-btn thunder" id="btnThunder" onclick="confirmDownload('thunder')">
+                    📁 迅雷网盘
+                </button>
+                <button class="modal-btn cancel" onclick="closeDownloadModal()">取消</button>
+            </div>
+        </div>
+    </div>
+
     <!-- 反馈弹窗 -->
-    <div class="modal-overlay" id="feedbackModal">
+    <div class="modal-overlay feedback-modal" id="feedbackModal">
         <div class="modal">
             <h3>💬 反馈问题</h3>
             <div class="modal-info">
@@ -529,10 +577,10 @@
                 <p class="game-name" id="feedbackGame"></p>
             </div>
             <textarea id="feedbackContent" placeholder="请描述问题（如：链接失效、下载不了、密码错误等）..."></textarea>
-            <input type="text" id="feedbackContact" placeholder="508002830@qq.com">
-            <div class="modal-buttons">
-                <button class="modal-btn cancel" onclick="closeFeedback()">取消</button>
-                <button class="modal-btn submit" onclick="submitFeedback()">📧 发送邮件</button>
+            <input type="text" id="feedbackContact" placeholder="QQ:508002830">
+            <div class="feedback-buttons">
+                <button class="feedback-btn-cancel" onclick="closeFeedback()">取消</button>
+                <button class="feedback-btn-submit" onclick="submitFeedback()">📧 发送邮件</button>
             </div>
         </div>
     </div>
@@ -540,10 +588,10 @@
     <script>
         // ===== 配置区域 =====
         const CONFIG = {
-            // 接收反馈的邮箱地址 - 改成你的邮箱
-            feedbackEmail: 'your-email@example.com',
+            // 接收反馈的邮箱地址
+            feedbackEmail: 'QQ:508002830',
             // 网站名称
-            siteName: '游戏资源站'
+            siteName: 'ATgame资源站'
         };
         // =====================
 
@@ -553,6 +601,7 @@
         let currentSort = 'date';
         let searchTerm = '';
         let currentFeedbackGame = '';
+        let currentDownloadGame = null;
 
         const categoryNames = {
             action: '动作', rpg: 'RPG', strategy: '策略',
@@ -682,7 +731,7 @@
                     <h3 class="game-title">${g.title}</h3>
                     <p class="game-date">📅 ${g.date || '未知日期'}</p>
                     <div class="card-actions">
-                        <a href="${g.url}" target="_blank" class="game-link">⬇️ 下载</a>
+                        <button class="game-link" onclick="openDownloadModal(${games.indexOf(g)})">⬇️ 下载</button>
                         <button class="feedback-btn" onclick="openFeedback('${g.title}')">💬 反馈</button>
                     </div>
                 </div>`;
@@ -745,7 +794,62 @@
             document.getElementById('announcement').style.display = 'none';
         }
 
-        // 反馈功能 - 发送到邮箱
+        // ===== 下载功能 =====
+        function openDownloadModal(gameIndex) {
+            currentDownloadGame = games[gameIndex];
+            if (!currentDownloadGame) return;
+
+            document.getElementById('downloadGameName').textContent = currentDownloadGame.title;
+            
+            // 检查哪些网盘有链接
+            const hasBaidu = currentDownloadGame.baiduUrl || currentDownloadGame.url;
+            const hasQuark = currentDownloadGame.quarkUrl;
+            const hasThunder = currentDownloadGame.thunderUrl;
+
+            // 更新按钮状态
+            document.getElementById('btnBaidu').classList.toggle('disabled', !hasBaidu);
+            document.getElementById('btnQuark').classList.toggle('disabled', !hasQuark);
+            document.getElementById('btnThunder').classList.toggle('disabled', !hasThunder);
+
+            document.getElementById('downloadModal').classList.add('active');
+        }
+
+        function confirmDownload(platform) {
+            if (!currentDownloadGame) return;
+
+            let url = '';
+            switch(platform) {
+                case 'baidu':
+                    url = currentDownloadGame.baiduUrl || currentDownloadGame.url; // 兼容旧的 url 字段
+                    break;
+                case 'quark':
+                    url = currentDownloadGame.quarkUrl;
+                    break;
+                case 'thunder':
+                    url = currentDownloadGame.thunderUrl;
+                    break;
+            }
+
+            if (!url) {
+                alert('该网盘暂无链接，请选择其他方式');
+                return;
+            }
+
+            window.open(url, '_blank');
+            closeDownloadModal();
+        }
+
+        function closeDownloadModal() {
+            document.getElementById('downloadModal').classList.remove('active');
+            currentDownloadGame = null;
+        }
+
+        // 点击弹窗外部关闭下载弹窗
+        document.getElementById('downloadModal').addEventListener('click', (e) => {
+            if (e.target.id === 'downloadModal') closeDownloadModal();
+        });
+
+        // ===== 反馈功能 =====
         function openFeedback(gameTitle) {
             currentFeedbackGame = gameTitle;
             document.getElementById('feedbackGame').textContent = gameTitle;
@@ -773,7 +877,7 @@
                 `游戏名称：${currentFeedbackGame}\n` +
                 `反馈时间：${new Date().toLocaleString('zh-CN')}\n` +
                 `问题描述：${content}\n` +
-                `联系方式：${contact || 'QQ:508002830'}`
+                `联系方式：${contact || '未填写'}`
             );
 
             // 打开邮件客户端
@@ -783,7 +887,7 @@
             closeFeedback();
         }
 
-        // 点击弹窗外部关闭
+        // 点击弹窗外部关闭反馈弹窗
         document.getElementById('feedbackModal').addEventListener('click', (e) => {
             if (e.target.id === 'feedbackModal') closeFeedback();
         });
