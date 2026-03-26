@@ -569,30 +569,22 @@
         <!-- 公告栏 -->
         <div class="announcement" id="announcement">
             <span class="announcement-icon">📢</span>
-            <span class="announcement-text">🎉（本网站所有资源免费下载）网站全新升级！点击下载可选择百度/夸克/迅雷网盘！有些网盘密码就在链接上建议：把密码单独复制后删去链接中的密码部分才能正常访问，如有其他问题加qq:508002830(备注来意）！</span>
+            <span class="announcement-text">🎉 （本网站所有资源免费下载）网站全新升级！点击下载可选择百度/夸克/迅雷网盘！有些网盘密码就在链接上建议：把密码单独复制后删去链接中的密码部分才能正常访问，如有其他问题加qq:508002830(备注来意）！</span>
             <button class="announcement-close" onclick="closeAnnouncement()">✕</button>
         </div>
 
         <!-- 打赏区域 -->
-        <div class="donate-section" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;">
-            <div>
-                <div class="donate-title">☕ 支持一下</div>
-                <div class="donate-desc">您的支持是我更新最大的动力</div>
-            </div>
-            <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;">
-                <div style="display:flex;gap:14px;">
-                    <span style="font-size:0.8rem;color:rgba(255,255,255,0.6);display:flex;align-items:center;gap:4px">
-                        👁 <span id="busuanzi_value_site_pv" style="color:#00d4ff;font-weight:700">--</span>
-                    </span>
-                    <span style="font-size:0.8rem;color:rgba(255,255,255,0.6);display:flex;align-items:center;gap:4px">
-                        🟢 <span id="busuanzi_value_site_uv" style="color:#00d4ff;font-weight:700">--</span>
-                    </span>
-                </div>
-                <button class="donate-btn" onclick="openDonateModal()">❤️ 打赏</button>
-            </div>
+        <div class="donate-section">
+            <div class="donate-title">☕ 支持一下</div>
+            <div class="donate-desc">您的支持是我更新最大的动力</div>
+            <button class="donate-btn" onclick="openDonateModal()">❤️ 打赏</button>
         </div>
 
         <header>
+            <div style="display:flex;justify-content:center;gap:20px;margin-bottom:8px;">
+                <span style="font-size:0.78rem;color:rgba(255,255,255,0.5);display:flex;align-items:center;gap:4px">👁 累计访问 <span id="busuanzi_value_site_pv" style="color:#00d4ff;font-weight:700">--</span></span>
+                <span style="font-size:0.78rem;color:rgba(255,255,255,0.5);display:flex;align-items:center;gap:4px">🟢 今日访客 <span id="busuanzi_value_site_uv" style="color:#00d4ff;font-weight:700">--</span></span>
+            </div>
             <h1>🎮 ATgame资源站</h1>
             <p class="subtitle">每日更新 · 全部免费</p>
         </header>
@@ -674,7 +666,6 @@
             </div>
         </div>
     </div>
-    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 
     <!-- 下载选择弹窗 -->
     <div class="modal-overlay" id="downloadModal">
@@ -1079,6 +1070,6 @@
         createStars();
         loadGames();
     </script>
-    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 </body>
 </html>
