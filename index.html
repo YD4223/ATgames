@@ -569,7 +569,7 @@
         <!-- 公告栏 -->
         <div class="announcement" id="announcement">
             <span class="announcement-icon">📢</span>
-            <span class="announcement-text">🎉 （本网站所有资源免费下载）网站全新升级！点击下载可选择百度/夸克/迅雷网盘！有些网盘密码就在链接上建议：把密码单独复制后删去链接中的密码部分才能正常访问，如有其他问题加qq:508002830(备注来意）！</span>
+            <span class="announcement-text">🎉 （本网站所有资源免费下载）网站全新升级！点击下载可选择百度/夸克/迅雷网盘！有些网盘密码就在链接上建议：把密码单独复制后删去链接中的密码部分才能正常访问，如有其他问题加qq:508002830(备注来意）</span>
             <button class="announcement-close" onclick="closeAnnouncement()">✕</button>
         </div>
 
@@ -660,8 +660,18 @@
             <div style="text-align:center;margin-top:20px">
                 <button class="modal-btn cancel" onclick="closeDonateModal()" style="width:100%">关闭</button>
             </div>
+            <!-- 统计数据 -->
+            <div style="display:flex;justify-content:flex-end;gap:16px;margin-top:14px;padding-top:12px;border-top:1px solid rgba(255,255,255,0.1)">
+                <span style="font-size:0.78rem;color:rgba(255,255,255,0.45);display:flex;align-items:center;gap:4px">
+                    👁 累计访问：<span id="busuanzi_value_site_pv" style="color:#00d4ff">--</span>
+                </span>
+                <span style="font-size:0.78rem;color:rgba(255,255,255,0.45);display:flex;align-items:center;gap:4px">
+                    🟢 在线人数：<span id="busuanzi_value_site_uv" style="color:#00d4ff">--</span>
+                </span>
+            </div>
         </div>
     </div>
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 
     <!-- 下载选择弹窗 -->
     <div class="modal-overlay" id="downloadModal">
