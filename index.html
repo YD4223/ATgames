@@ -348,7 +348,10 @@
             .game-grid { grid-template-columns: 1fr; }
             .filter-bar { gap: 6px; }
             .filter-btn { padding: 6px 12px; font-size: 0.85rem; }
-            .navbar-links { display: none; }
+            .navbar-links { display: flex; overflow-x: auto; gap: 4px; padding-bottom: 8px; flex-wrap: nowrap; scrollbar-width: none; }
+            .navbar-links::-webkit-scrollbar { display: none; }
+            .navbar-link { white-space: nowrap; font-size: 0.75rem; padding: 5px 10px; }
+            .navbar-btn { white-space: nowrap; font-size: 0.75rem; padding: 5px 10px; }
         }
     </style>
 </head>
@@ -573,14 +576,14 @@
             grid.innerHTML = gamesToRender.map((game, index) => `
                 <div class="game-card">
                     <div class="card-top">
-                        <span class="game-tag">${game.category}</span>
-                        <span class="platform-tag ${game.platform}">${game.platform === 'pc' ? '🖥️ PC' : '📱 安卓'}</span>
+                        <span class="game-tag">${game.category || '游戏'}</span>
+                        <span class="platform-tag ${game.platform || 'pc'}">${game.platform === 'android' ? '📱 安卓' : '🖥️ PC'}</span>
                     </div>
-                    <h3 class="game-title">${game.title}</h3>
-                    <p class="game-desc">${game.description}</p>
+                    <h3 class="game-title">${game.title || '未知游戏'}</h3>
+                    <p class="game-desc">${game.description || '暂无描述'}</p>
                     <div class="game-meta">
-                        <span>📅 ${game.date}</span>
-                        <span>💾 ${game.size}</span>
+                        <span>📅 ${game.date || ''}</span>
+                        <span>💾 ${game.size || ''}</span>
                     </div>
                     <button class="game-btn" onclick="openDownloadModal(${games.indexOf(game)})">⬇️ 下载</button>
                 </div>
