@@ -348,10 +348,14 @@
             .game-grid { grid-template-columns: 1fr; }
             .filter-bar { gap: 6px; }
             .filter-btn { padding: 6px 12px; font-size: 0.85rem; }
-            .navbar-links { display: flex; overflow-x: auto; gap: 4px; padding-bottom: 8px; flex-wrap: nowrap; scrollbar-width: none; }
+            .navbar-inner { flex-wrap: nowrap; overflow-x: auto; padding-bottom: 8px; scrollbar-width: none; }
+            .navbar-inner::-webkit-scrollbar { display: none; }
+            .navbar-links { display: flex !important; overflow-x: auto; gap: 4px; flex-wrap: nowrap; scrollbar-width: none; padding-bottom: 0; }
             .navbar-links::-webkit-scrollbar { display: none; }
-            .navbar-link { white-space: nowrap; font-size: 0.75rem; padding: 5px 10px; }
-            .navbar-btn { white-space: nowrap; font-size: 0.75rem; padding: 5px 10px; }
+            .navbar-link { white-space: nowrap; font-size: 0.7rem !important; padding: 5px 8px !important; }
+            .navbar-btn { white-space: nowrap; font-size: 0.7rem !important; padding: 5px 8px !important; flex-shrink: 0; }
+            .navbar-theme { flex-shrink: 0; }
+            .navbar-donate { flex-shrink: 0; }
         }
     </style>
 </head>
@@ -576,18 +580,31 @@
             grid.innerHTML = gamesToRender.map((game, index) => `
                 <div class="game-card">
                     <div class="card-top">
-                        <span class="game-tag">${game.category || '游戏'}</span>
+                        <span class="game-tag">${getCategoryName(game.category)}</span>
                         <span class="platform-tag ${game.platform || 'pc'}">${game.platform === 'android' ? '📱 安卓' : '🖥️ PC'}</span>
                     </div>
                     <h3 class="game-title">${game.title || '未知游戏'}</h3>
-                    <p class="game-desc">${game.description || '暂无描述'}</p>
+                    ${game.description ? `<p class="game-desc">${game.description}</p>` : ''}
                     <div class="game-meta">
                         <span>📅 ${game.date || ''}</span>
-                        <span>💾 ${game.size || ''}</span>
+                        ${game.size ? `<span>💾 ${game.size}</span>` : ''}
                     </div>
                     <button class="game-btn" onclick="openDownloadModal(${games.indexOf(game)})">⬇️ 下载</button>
                 </div>
             `).join('');
+        }
+
+        function getCategoryName(cat) {
+            const map = {
+                'action': '动作',
+                'rpg': 'RPG',
+                'strategy': '策略',
+                'simulation': '模拟',
+                'casual': '休闲',
+                'software': '软件',
+                'today': '今日更新'
+            };
+            return map[cat] || cat || '游戏';
         }
 
         function updateCounts() {
