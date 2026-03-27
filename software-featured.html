@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>软件精选 - ATgame资源站</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='80'>🎮</text></svg>" type="image/svg+xml">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        html {
+            background: #ececf1;
+            overscroll-behavior: none;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            min-height: 100vh;
+            color: #333;
+            background: linear-gradient(135deg, #ececf1 0%, #e5e7eb 100%);
+            position: relative;
+            background-attachment: fixed;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 20% 50%, rgba(0,212,255,0.03) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 80%, rgba(124,58,237,0.03) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 0;
+            animation: float 20s ease-in-out infinite;
+            will-change: transform;
+        }
+
+        .container { max-width: 1200px; margin: 0 auto; padding: 20px; position: relative; z-index: 1; }
+
+        /* 导航栏 */
+        .navbar {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(0,0,0,0.08);
+            padding: 12px 24px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+        .navbar-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+        }
+        .navbar-logo {
+            font-size: 1.3rem;
+            font-weight: 800;
+            color: #333;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            white-space: nowrap;
+        }
+        .navbar-logo span { color: #00d4ff; }
+        .navbar-links {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .navbar-link {
+            padding: 6px 14px;
+            border-radius: 16px;
+            font-size: 0.82rem;
+            color: rgba(0,0,0,0.6);
+            cursor: pointer;
+            transition: all 0.2s;
+            border: 1px solid transparent;
+            text-decoration: none;
+        }
+        .navbar-link:hover {
+            color: #00d4ff;
+            background: rgba(0,212,255,0.08);
+        }
+        .navbar-link.active {
+            color: #00d4ff;
+            background: rgba(0,212,255,0.12);
+            border-color: rgba(0,212,255,0.3);
+        }
+        .navbar-right {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .navbar-theme {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: rgba(0,0,0,0.05);
+            border: 1px solid rgba(0,0,0,0.1);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+            transition: all 0.3s;
+        }
+        .navbar-theme:hover {
+            background: rgba(0,212,255,0.1);
+            border-color: rgba(0,212,255,0.3);
+        }
+        .navbar-donate {
+            padding: 8px 18px;
+            background: linear-gradient(90deg, #ff6b35, #ffaa7f);
+            color: #fff;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: none;
+            white-space: nowrap;
+        }
+        .navbar-donate:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 20px rgba(255,107,53,0.4);
+        }
+        .navbar-permanent {
+            padding: 6px 14px;
+            border-radius: 16px;
+            font-size: 0.82rem;
+            background: linear-gradient(90deg, #ff6b35, #ffaa7f);
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-weight: 600;
+            box-shadow: 0 3px 12px rgba(255,107,53,0.3);
+        }
+        .navbar-permanent:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 16px rgba(255,107,53,0.4);
+        }
+
+        /* 深色模式 */
+        body.dark-mode {
+            background: linear-gradient(135deg, #1a1a1a 0%, #242424 100%);
+            color: #f0f0f0;
+        }
+        body.dark-mode .navbar {
+            background: rgba(26,26,26,0.95);
+            border-bottom-color: rgba(255,255,255,0.08);
+        }
+        body.dark-mode .navbar-logo {
+            color: #f0f0f0;
+        }
+
+        header { text-align: center; padding: 40px 0 30px; }
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            color: #333;
+            font-weight: 700;
+        }
+        body.dark-mode h1 { color: #f0f0f0; }
+        .subtitle { color: #666; font-size: 0.95rem; }
+        body.dark-mode .subtitle { color: rgba(255,255,255,0.6); }
+
+        /* 内容区域 */
+        .content-area {
+            background: #fff;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            min-height: 400px;
+        }
+        body.dark-mode .content-area {
+            background: #2a2a2a;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+        }
+
+        .placeholder {
+            text-align: center;
+            color: #999;
+            padding: 60px 20px;
+        }
+        body.dark-mode .placeholder { color: rgba(255,255,255,0.4); }
+        .placeholder-icon { font-size: 3rem; margin-bottom: 20px; }
+        .placeholder p { font-size: 1.1rem; margin-bottom: 10px; }
+
+        footer {
+            margin-top: 60px;
+            padding: 40px 20px;
+            border-top: 1px solid rgba(0,0,0,0.08);
+            text-align: center;
+            color: rgba(0,0,0,0.4);
+            font-size: 0.8rem;
+        }
+        body.dark-mode footer {
+            border-top-color: rgba(255,255,255,0.08);
+            color: rgba(255,255,255,0.4);
+        }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 1.8rem; }
+            .content-area { padding: 20px; }
+            .navbar-links { display: none; }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="navbar-inner">
+            <a href="index.html" class="navbar-logo">🎮 <span>ATgame资源站</span></a>
+            <div class="navbar-links">
+                <a href="index.html" class="navbar-link">🏠 首页</a>
+                <a href="games-featured.html" class="navbar-link">🎮 游戏精选</a>
+                <a href="software-featured.html" class="navbar-link active">🛠️ 软件精选</a>
+                <a href="install-tutorial.html" class="navbar-link">📖 安装教程</a>
+                <button class="navbar-permanent" onclick="openPermanentModal()">⭐ 永久发布页</button>
+            </div>
+            <div class="navbar-right">
+                <button class="navbar-theme" id="themeBtn" onclick="toggleTheme()" title="切换主题">🌙</button>
+                <button class="navbar-donate" onclick="alert('打赏功能')">☕ 打赏</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <header>
+            <h1>🛠️ 软件精选</h1>
+            <p class="subtitle">精心挑选的优质软件专题</p>
+        </header>
+
+        <div class="content-area">
+            <div class="placeholder">
+                <div class="placeholder-icon">🛠️</div>
+                <p>软件精选内容区域</p>
+                <p style="font-size:0.9rem;color:#ccc">在这里添加软件专题内容</p>
+            </div>
+        </div>
+
+        <footer>
+            <p>© 2024 ATgame资源站 | 所有权利保留</p>
+        </footer>
+    </div>
+
+    <!-- 永久发布页弹窗 -->
+    <div class="modal-overlay" id="permanentModal" style="display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.5);z-index:2000;align-items:center;justify-content:center">
+        <div class="modal" style="background:#fff;border-radius:20px;padding:30px;max-width:400px;width:90%;box-shadow:0 20px 60px rgba(0,0,0,0.3)">
+            <h3 style="font-size:1.3rem;margin-bottom:20px;color:#333">⭐ 收藏本网页</h3>
+            <div style="text-align:center;padding:20px;background:rgba(0,212,255,0.08);border-radius:12px;margin:20px 0">
+                <p style="font-size:1.1rem;margin-bottom:10px">👇 按照以下步骤收藏本网页</p>
+                <p style="color:#666;font-size:0.9rem;line-height:1.8">
+                    <strong>电脑：</strong>按 Ctrl+D 快速收藏<br>
+                    <strong>手机：</strong>点击浏览器菜单 → 收藏此页面<br>
+                    <strong>iOS：</strong>点击分享 → 添加到主屏幕
+                </p>
+            </div>
+            <button style="background:linear-gradient(90deg, #00d4ff, #7c3aed);color:#fff;width:100%;padding:12px;border:none;border-radius:12px;cursor:pointer;font-weight:600" onclick="closePermanentModal()">我已收藏</button>
+        </div>
+    </div>
+
+    <script>
+        function toggleTheme() {
+            document.body.classList.toggle('dark-mode');
+            const isDark = document.body.classList.contains('dark-mode');
+            document.getElementById('themeBtn').textContent = isDark ? '☀️' : '🌙';
+            localStorage.setItem('theme', isDark ? 'dark' : 'light');
+        }
+        
+        if (localStorage.getItem('theme') === 'dark') {
+            document.body.classList.add('dark-mode');
+            document.getElementById('themeBtn').textContent = '☀️';
+        }
+
+        function openPermanentModal() {
+            document.getElementById('permanentModal').style.display = 'flex';
+        }
+
+        function closePermanentModal() {
+            document.getElementById('permanentModal').style.display = 'none';
+        }
+
+        document.getElementById('permanentModal').addEventListener('click', (e) => {
+            if (e.target.id === 'permanentModal') closePermanentModal();
+        });
+    </script>
+</body>
+</html>
