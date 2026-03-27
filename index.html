@@ -283,6 +283,7 @@
             display: flex;
             flex-direction: column;
             box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            min-height: 280px;
         }
         .game-card:hover { transform: translateY(-8px); box-shadow: 0 12px 24px rgba(0,0,0,0.12); border-color: #00d4ff; }
         .card-top { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; flex-wrap: wrap; }
@@ -290,9 +291,9 @@
         .platform-tag { display: inline-block; padding: 3px 10px; border-radius: 10px; font-size: 0.7rem; font-weight: 600; }
         .platform-tag.pc { background: rgba(79,172,254,0.2); color: #4facfe; }
         .platform-tag.android { background: rgba(67,233,123,0.2); color: #43e97b; }
-        .game-title { font-size: 1.1rem; font-weight: 600; margin-bottom: 8px; line-height: 1.4; color: #333; }
-        .game-desc { font-size: 0.85rem; color: #666; margin-bottom: 12px; flex: 1; line-height: 1.5; }
-        .game-meta { display: flex; justify-content: space-between; align-items: center; font-size: 0.8rem; color: #999; margin-bottom: 12px; }
+        .game-title { font-size: 1.1rem; font-weight: 600; margin-bottom: 8px; line-height: 1.4; color: #333; flex-shrink: 0; }
+        .game-desc { font-size: 0.85rem; color: #666; margin-bottom: 12px; flex: 1; line-height: 1.5; min-height: 50px; }
+        .game-meta { display: flex; justify-content: space-between; align-items: center; font-size: 0.8rem; color: #999; margin-bottom: 12px; flex-shrink: 0; }
         .game-btn {
             padding: 10px 16px;
             background: linear-gradient(90deg, #00d4ff, #7c3aed);
@@ -303,6 +304,8 @@
             font-weight: 600;
             transition: all 0.3s;
             font-size: 0.9rem;
+            margin-top: auto;
+            width: 100%;
         }
         .game-btn:hover { transform: scale(1.02); box-shadow: 0 5px 15px rgba(0,212,255,0.3); }
 
