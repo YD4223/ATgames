@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ATgames资源站</title>
+    <title>ATgame资源站</title>
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='80'>🎮</text></svg>" type="image/svg+xml">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -365,7 +365,7 @@
 <body>
     <nav class="navbar">
         <div class="navbar-inner">
-            <a href="index.html" class="navbar-logo">🎮 <span>ATgames资源站</span></a>
+            <a href="index.html" class="navbar-logo">🎮 <span>ATgame资源站</span></a>
             <div class="navbar-links">
                 <a href="index.html" class="navbar-link active">🏠 首页</a>
                 <a href="games-featured.html" class="navbar-link">🎮 游戏精选</a>
@@ -384,7 +384,7 @@
     <div class="container">
         <div class="announcement" id="announcement">
             <span class="announcement-icon">📢</span>
-            <span class="announcement-text">（本网站所有资源免费下载）网站全新升级！点击下载可选择百度/夸克/迅雷网盘！有些网盘密码就在链接上建议：把密码单独复制后删去链接中的密码部分才能正常访问，如有其他问题加qq:508002830(备注来意）！</span>
+            <span class="announcement-text">🎉 网站全新升级！点击下载可选择百度/夸克/雷霆网盘！</span>
             <button class="announcement-close" onclick="closeAnnouncement()">✕</button>
         </div>
 
@@ -393,7 +393,7 @@
                 <span style="font-size:0.78rem;color:rgba(0,0,0,0.5);display:flex;align-items:center;gap:4px">👁 累计访问 <span id="busuanzi_value_site_pv" style="color:#00d4ff;font-weight:700">--</span></span>
                 <span style="font-size:0.78rem;color:rgba(0,0,0,0.5);display:flex;align-items:center;gap:4px">🟢 今日访客 <span id="busuanzi_value_site_uv" style="color:#00d4ff;font-weight:700">--</span></span>
             </div>
-            <h1>欢迎来到ATgames资源站</h1>
+            <h1>欢迎来到ATgame资源</h1>
             <p class="subtitle">本站所有的游戏和软件资源均为免费下载，无任何收费项目<br>喜欢的可以 Ctrl+D 收藏本网站</p>
         </header>
 
@@ -478,7 +478,7 @@
             <div class="modal-buttons">
                 <button class="modal-btn baidu" id="btnBaidu" onclick="confirmDownload('baidu')">🔗 百度网盘</button>
                 <button class="modal-btn quark" id="btnQuark" onclick="confirmDownload('quark')">🔗 夸克网盘</button>
-                <button class="modal-btn thunder" id="btnThunder" onclick="confirmDownload('thunder')">🔗 迅雷网盘</button>
+                <button class="modal-btn thunder" id="btnThunder" onclick="confirmDownload('thunder')">🔗 雷霆网盘</button>
                 <button class="modal-btn cancel" onclick="closeDownloadModal()">取消</button>
             </div>
         </div>
@@ -562,11 +562,13 @@
             const platform = document.querySelector('.filter-btn[data-type="platform"].active')?.dataset.filter || 'all';
             const category = document.querySelector('.filter-btn[data-type="category"].active')?.dataset.filter || 'all';
             const sort = document.querySelector('.sort-btn.active')?.dataset.sort || 'date';
+            const today = new Date().toISOString().split('T')[0];
 
             let filtered = games.filter(game => {
                 const matchSearch = !searchText || game.title.toLowerCase().includes(searchText);
                 const matchPlatform = platform === 'all' || game.platform === platform;
-                const matchCategory = category === 'all' || game.category === category;
+                let matchCategory = category === 'all' || game.category === category;
+                if (category === 'today') matchCategory = game.date === today;
                 return matchSearch && matchPlatform && matchCategory;
             });
 
@@ -611,9 +613,10 @@
         }
 
         function updateCounts() {
+            const today = new Date().toISOString().split('T')[0];
             const counts = {
                 all: games.length,
-                today: games.filter(g => g.category === 'today').length,
+                today: games.filter(g => g.date === today).length,
                 action: games.filter(g => g.category === 'action').length,
                 rpg: games.filter(g => g.category === 'rpg').length,
                 strategy: games.filter(g => g.category === 'strategy').length,
