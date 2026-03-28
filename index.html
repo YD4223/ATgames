@@ -273,17 +273,17 @@
         .sort-btn.active, .sort-btn:hover { border-color: #00d4ff; color: #00d4ff; background: rgba(0,212,255,0.08); }
 
         /* 游戏卡片 */
-        .game-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 20px; }
+        .game-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 16px; }
         .game-card {
             background: #fff;
-            border-radius: 20px;
-            padding: 20px;
+            border-radius: 16px;
+            padding: 16px;
             transition: all 0.3s;
             border: 1px solid #e8e8e8;
             display: flex;
             flex-direction: column;
             box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-            min-height: 280px;
+            min-height: 240px;
         }
         .game-card:hover { transform: translateY(-8px); box-shadow: 0 12px 24px rgba(0,0,0,0.12); border-color: #00d4ff; }
         .card-top { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; flex-wrap: wrap; }
@@ -291,19 +291,19 @@
         .platform-tag { display: inline-block; padding: 3px 10px; border-radius: 10px; font-size: 0.7rem; font-weight: 600; }
         .platform-tag.pc { background: rgba(79,172,254,0.2); color: #4facfe; }
         .platform-tag.android { background: rgba(67,233,123,0.2); color: #43e97b; }
-        .game-title { font-size: 1.1rem; font-weight: 600; margin-bottom: 8px; line-height: 1.4; color: #333; flex-shrink: 0; }
-        .game-desc { font-size: 0.85rem; color: #666; margin-bottom: 12px; flex: 1; line-height: 1.5; min-height: 50px; }
+        .game-title { font-size: 0.92rem; font-weight: 600; margin-bottom: 6px; line-height: 1.3; color: #333; flex-shrink: 0; }
+        .game-desc { font-size: 0.8rem; color: #666; margin-bottom: 8px; flex: 1; line-height: 1.4; min-height: 40px; }
         .game-meta { display: flex; justify-content: space-between; align-items: center; font-size: 0.8rem; color: #999; margin-bottom: 12px; flex-shrink: 0; }
         .game-btn {
-            padding: 10px 16px;
+            padding: 8px 12px;
             background: linear-gradient(90deg, #00d4ff, #7c3aed);
             color: #fff;
             border: none;
-            border-radius: 12px;
+            border-radius: 10px;
             cursor: pointer;
             font-weight: 600;
             transition: all 0.3s;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             margin-top: auto;
             width: 100%;
         }
@@ -346,19 +346,31 @@
         footer a:hover { color: #00d4ff; }
 
         /* 响应式 */
-        @media (max-width: 768px) {
-            h1 { font-size: 2rem; }
-            .game-grid { grid-template-columns: 1fr; }
+        @media (max-width: 1400px) {
+            .game-grid { grid-template-columns: repeat(5, 1fr); }
+        }
+        @media (max-width: 1100px) {
+            .game-grid { grid-template-columns: repeat(4, 1fr); }
+        }
+        @media (max-width: 800px) {
+            .game-grid { grid-template-columns: repeat(3, 1fr); }
+        }
+        @media (max-width: 500px) {
+            .game-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+            .game-card { padding: 12px; min-height: 200px; }
+            .game-title { font-size: 0.85rem; }
+            h1 { font-size: 1.8rem; }
             .filter-bar { gap: 6px; }
-            .filter-btn { padding: 6px 12px; font-size: 0.85rem; }
+            .filter-btn { padding: 6px 10px; font-size: 0.8rem; }
             .navbar-inner { flex-wrap: nowrap; overflow-x: auto; padding-bottom: 8px; scrollbar-width: none; }
             .navbar-inner::-webkit-scrollbar { display: none; }
             .navbar-links { display: flex !important; overflow-x: auto; gap: 4px; flex-wrap: nowrap; scrollbar-width: none; padding-bottom: 0; }
             .navbar-links::-webkit-scrollbar { display: none; }
-            .navbar-link { white-space: nowrap; font-size: 0.7rem !important; padding: 5px 8px !important; }
-            .navbar-btn { white-space: nowrap; font-size: 0.7rem !important; padding: 5px 8px !important; flex-shrink: 0; }
-            .navbar-theme { flex-shrink: 0; }
-            .navbar-donate { flex-shrink: 0; }
+            .navbar-link { white-space: nowrap; font-size: 0.65rem !important; padding: 4px 6px !important; }
+            .navbar-btn { white-space: nowrap; font-size: 0.65rem !important; padding: 4px 6px !important; flex-shrink: 0; }
+            .navbar-theme { flex-shrink: 0; width: 30px; height: 30px; }
+            .navbar-donate { display: none; }
+            .navbar-permanent { display: none; }
         }
     </style>
 </head>
@@ -384,7 +396,7 @@
     <div class="container">
         <div class="announcement" id="announcement">
             <span class="announcement-icon">📢</span>
-            <span class="announcement-text">🎉 （本网站所有资源免费下载）网站全新升级！点击下载可选择百度/夸克/迅雷网盘！有些网盘密码就在链接上建议：把密码单独复制后删去链接中的密码部分才能正常访问，如有其他问题加qq:508002830(备注来意）！</span>
+            <span class="announcement-text">🎉 （本站资源仅供学习与体验，请在下载后24小时内删除；禁止在其他平台和网站倒卖本站一切资源，侵权者由侵权者本人承担，本站不承担任何责任！！！）有些网盘密码就在链接上建议：把密码单独复制后删去链接中的密码部分才能正常访问，如有其他问题加qq:508002830(备注来意）！</span>
             <button class="announcement-close" onclick="closeAnnouncement()">✕</button>
         </div>
 
@@ -393,7 +405,7 @@
                 <span style="font-size:0.78rem;color:rgba(0,0,0,0.5);display:flex;align-items:center;gap:4px">👁 累计访问 <span id="busuanzi_value_site_pv" style="color:#00d4ff;font-weight:700">--</span></span>
                 <span style="font-size:0.78rem;color:rgba(0,0,0,0.5);display:flex;align-items:center;gap:4px">🟢 今日访客 <span id="busuanzi_value_site_uv" style="color:#00d4ff;font-weight:700">--</span></span>
             </div>
-            <h1>欢迎来到ATgames资源站</h1>
+            <h1>欢迎来到ATgames资源</h1>
             <p class="subtitle">本站所有的游戏和软件资源均为免费下载，无任何收费项目<br>喜欢的可以 Ctrl+D 收藏本网站</p>
         </header>
 
@@ -478,7 +490,7 @@
             <div class="modal-buttons">
                 <button class="modal-btn baidu" id="btnBaidu" onclick="confirmDownload('baidu')">🔗 百度网盘</button>
                 <button class="modal-btn quark" id="btnQuark" onclick="confirmDownload('quark')">🔗 夸克网盘</button>
-                <button class="modal-btn thunder" id="btnThunder" onclick="confirmDownload('thunder')">🔗 雷霆网盘</button>
+                <button class="modal-btn thunder" id="btnThunder" onclick="confirmDownload('thunder')">🔗迅雷网盘</button>
                 <button class="modal-btn cancel" onclick="closeDownloadModal()">取消</button>
             </div>
         </div>
