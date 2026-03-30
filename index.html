@@ -388,7 +388,7 @@
                 <button class="navbar-btn navbar-permanent" onclick="openPermanentModal()">⭐ 永久发布页</button>
                 <button class="navbar-btn navbar-feedback" onclick="openFeedbackModal()">💬 求游戏/反馈</button>
                 <button class="navbar-theme" id="themeBtn" onclick="toggleTheme()" title="切换主题">🌙</button>
-                <button class="navbar-donate" onclick="openDonateModal()">☕ 打赏</button>
+                <button class="navbar-donate" onclick="openDownloadPCModal()">💻 下载PC客户端</button>
             </div>
         </div>
     </nav>
@@ -461,6 +461,20 @@
         </footer>
     </div>
 
+    <!-- 下载PC客户端弹窗 -->
+    <div class="modal-overlay" id="downloadPCModal">
+        <div class="modal">
+            <h3>💻 下载PC客户端</h3>
+            <div style="text-align:center;margin:30px 0">
+                <p style="margin-bottom:20px;color:#666">下载桌面版，体验更流畅！</p>
+                <a href="download/ATgamesPC客户端.exe" download style="display:inline-block;padding:15px 40px;background:linear-gradient(90deg, #00d4ff, #7c3aed);color:#fff;border-radius:12px;text-decoration:none;font-weight:600;font-size:1.1rem;box-shadow:0 5px 20px rgba(0,212,255,0.3)">⬇️ 立即下载</a>
+            </div>
+            <div style="text-align:center">
+                <button class="modal-btn cancel" onclick="closeDownloadPCModal()" style="width:100%">关闭</button>
+            </div>
+        </div>
+    </div>
+
     <!-- 打赏弹窗 -->
     <div class="modal-overlay" id="donateModal">
         <div class="modal">
@@ -478,6 +492,23 @@
             </div>
             <div style="text-align:center;margin-top:20px">
                 <button class="modal-btn cancel" onclick="closeDonateModal()" style="width:100%">关闭</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 下载PC客户端弹窗 -->
+    <div class="modal-overlay" id="downloadPCModal">
+        <div class="modal" style="max-width:420px">
+            <h3>💻 下载PC客户端</h3>
+            <div style="text-align:center;padding:20px 0">
+                <div style="font-size:4rem;margin-bottom:16px">🎮</div>
+                <p style="color:#666;margin-bottom:8px;font-size:0.95rem">ATgames 桌面版客户端</p>
+                <p style="color:#999;font-size:0.85rem;margin-bottom:24px">无需打开浏览器，直接畅玩！</p>
+                <a href="download/ATgamesPC客户端.exe" download style="display:inline-block;padding:14px 40px;background:linear-gradient(90deg,#00d4ff,#7c3aed);color:#fff;border-radius:12px;text-decoration:none;font-weight:700;font-size:1rem;box-shadow:0 5px 20px rgba(0,212,255,0.3);transition:all 0.3s">⬇️ 立即下载</a>
+                <p style="color:#bbb;font-size:0.78rem;margin-top:16px">仅支持 Windows 系统</p>
+            </div>
+            <div style="text-align:center;margin-top:10px">
+                <button class="modal-btn cancel" onclick="closeDownloadPCModal()" style="width:100%">关闭</button>
             </div>
         </div>
     </div>
@@ -692,6 +723,10 @@
         }
         function closeDonateModal() { document.getElementById('donateModal').classList.remove('active'); }
         document.getElementById('donateModal').addEventListener('click', (e) => { if (e.target.id === 'donateModal') closeDonateModal(); });
+
+        function openDownloadPCModal() { document.getElementById('downloadPCModal').classList.add('active'); }
+        function closeDownloadPCModal() { document.getElementById('downloadPCModal').classList.remove('active'); }
+        document.getElementById('downloadPCModal').addEventListener('click', (e) => { if (e.target.id === 'downloadPCModal') closeDownloadPCModal(); });
 
         function openPermanentModal() { document.getElementById('permanentModal').classList.add('active'); }
         function closePermanentModal() { document.getElementById('permanentModal').classList.remove('active'); }
